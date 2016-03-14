@@ -10,11 +10,13 @@ import React, {
   StyleSheet,
   Text,
   TouchableHighlight,
-  View
+  View,
+  WebView
 } from 'react-native';
 import Camera from 'react-native-camera';
-import { Surface } from 'gl-react-native';
-import HelloGL from './HelloGL.js';
+
+const WEBVIEW_REF = 'webview';
+const BGWASH = 'rbga(255,255,255,0.25)';
 
 class nativeCamera extends Component {
   render() {
@@ -26,9 +28,12 @@ class nativeCamera extends Component {
           }}
           style={styles.preview}
           aspect={Camera.constants.Aspect.fill}>
-          <Surface width={511} height={341}>
-            <HelloGL />
-          </Surface>
+          <WebView 
+            ref={WEBVIEW_REF}
+            style={styles.webView}
+            javaScriptEnabled={true}
+            scalesPageToFit={true}
+          />
           <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
         </Camera>
       </View>
@@ -60,7 +65,11 @@ const styles = StyleSheet.create({
     color: '#000',
     padding: 10,
     margin: 40
-  }
+  },
+    webView: {
+    backgroundColor: BGWASH,
+    height: 350,
+  },
 });
 
 AppRegistry.registerComponent('nativeCamera', () => nativeCamera);
