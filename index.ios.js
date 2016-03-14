@@ -38,17 +38,9 @@ const HTML = `
         font: 62.5% arial, sans-serif;
         background: transparent;
       }
-      h1 {
-        top: 10px;
-        padding: 45px;
-        margin: 0;
-        text-align: center;
-        color: #000;
-      }
     </style>
   </head>
   <body>
-    <p> This is my content. It is now showing up. </p>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r74/three.min.js"></script>
     <script>
 
@@ -643,10 +635,13 @@ class nativeCamera extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image
+        <Camera
+          ref={(cam) => {
+            this.camera = cam;
+          }}
           style={styles.preview}
-          source={{uri: 'http://facebook.github.io/react/img/logo_og.png'}}
-        />
+          aspect={Camera.constants.Aspect.fill}>
+        </Camera>
         <View style={styles.webviewcont}>
           <WebViewBridge 
             ref="webviewbridge"
@@ -698,7 +693,7 @@ const styles = StyleSheet.create({
   webviewcont: {
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width,
-    backgroundColor: 'rgba(255,0,0,0.2)'
+    backgroundColor: 'transparent'
   },
   webView: {
     backgroundColor: 'transparent'
