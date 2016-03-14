@@ -160,6 +160,7 @@ class nativeCamera extends Component {
 
   move() {
     this.setState({ x: 100 });
+    console.log( this.state.x );
   }
 
   takePicture() {
