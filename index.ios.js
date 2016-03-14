@@ -15,6 +15,7 @@ import React, {
   WebView
 } from 'react-native';
 import Camera from 'react-native-camera';
+import WebViewBridge from 'react-native-webview-bridge';
 
 const WEBVIEW_REF = 'webview';
 const BGWASH = 'rgba(255,255,0,1.0)';
@@ -110,6 +111,36 @@ const HTML = `
 </html>
 `;
 
+const injectScript = `
+  function webViewBridgeReady(cb) {
+    //checks whether WebViewBirdge exists in global scope.
+    if (window.WebViewBridge) {
+      cb(window.WebViewBridge);
+      return;
+    }
+
+    function handler() {
+      //remove the handler from listener since we don't need it anymore
+      document.removeEventListener('WebViewBridge', handler, false);
+      //pass the WebViewBridge object to the callback
+      cb(window.WebViewBridge);
+    }
+
+    //if WebViewBridge doesn't exist in global scope attach itself to document
+    //event system. Once the code is being injected by extension, the handler will
+    //be called.
+    document.addEventListener('WebViewBridge', handler, false);
+  }
+
+  webViewBridgeReady(function (webViewBridge) {
+    webViewBridge.onMessage = function (message) {
+      mesh.position.x = parseInt( JSON.parse( message ).x );
+
+      // webViewBridge.send("message from webview");
+    };
+  });
+`;
+
 /*
         <Image
           style={styles.preview}
@@ -143,23 +174,24 @@ class nativeCamera extends Component {
           source={{uri: 'http://facebook.github.io/react/img/logo_og.png'}}
         />
         <View style={styles.webviewcont}>
-          <WebView 
-            ref={WEBVIEW_REF}
+          <WebViewBridge 
+            ref="webviewbridge"
             automaticallyAdjustContentInsets={true}
             source={{ html: HTML }}
             style={styles.webView}
-            injectedJavaScript={'x = ' + this.state.x }
+            injectedJavaScript={injectScript}
             javaScriptEnabled={true}
             scalesPageToFit={true}
           />
         </View>
-        <Text style={styles.capture} onClick={this.move.bind(this)}>[MOVE]</Text>
+        <Text style={styles.capture} onPress={this.move.bind(this)}>[MOVE]</Text>
       </View>
     );
   }
 
   move() {
-    this.setState({ x: 100 });
+    this.setState({ x: this.state.x + 10 });
+    this.refs.webviewbridge.sendToBridge( JSON.stringify( this.state ) )
     console.log( this.state.x );
   }
 
