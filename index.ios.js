@@ -153,13 +153,13 @@ class nativeCamera extends Component {
             scalesPageToFit={true}
           />
         </View>
-        <Text style={styles.capture} onClick={this.move}>[MOVE]</Text>
+        <Text style={styles.capture} onClick={this.move.bind(this)}>[MOVE]</Text>
       </View>
     );
   }
 
   move() {
-    this.setState({ x: this.state.x + 5 });
+    this.setState({ x: 100 });
   }
 
   takePicture() {
