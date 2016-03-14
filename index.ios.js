@@ -8,6 +8,7 @@ import React, {
   Component,
   Dimensions,
   StyleSheet,
+  Image,
   Text,
   TouchableHighlight,
   View,
@@ -16,26 +17,26 @@ import React, {
 import Camera from 'react-native-camera';
 
 const WEBVIEW_REF = 'webview';
-const BGWASH = 'rbga(255,255,255,0.25)';
+const BGWASH = 'rgba(255,255,0,1.0)';
 
 class nativeCamera extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Camera
-          ref={(cam) => {
-            this.camera = cam;
-          }}
+        <Image
           style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}>
+          source={{uri: 'http://facebook.github.io/react/img/logo_og.png'}}
+        />
+        <View style={styles.webviewcont}>
           <WebView 
             ref={WEBVIEW_REF}
+            automaticallyAdjustContentInsets={true}
+            source={{ html: '' }}
             style={styles.webView}
             javaScriptEnabled={true}
             scalesPageToFit={true}
           />
-          <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
-        </Camera>
+        </View>
       </View>
     );
   }
@@ -52,8 +53,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    position: 'absolute',
     alignItems: 'center',
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width
@@ -66,10 +66,14 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 40
   },
-    webView: {
-    backgroundColor: BGWASH,
-    height: 350,
+  webviewcont: {
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
+    backgroundColor: 'rgba(255,0,0,0.5)'
   },
+  webView: {
+    position: 'absolute'
+  }
 });
 
 AppRegistry.registerComponent('nativeCamera', () => nativeCamera);
