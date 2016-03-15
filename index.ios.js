@@ -516,7 +516,6 @@ const HTML = `
     <script>    var camera, scene, renderer;
       var controls;
       var mesh;
-      var x = 0;
 
       init();
       animate();
@@ -561,10 +560,6 @@ const HTML = `
       function animate() {
 
         requestAnimationFrame( animate );
-
-       if( x ) {
-          mesh.position.x = x;
-       }
 
         mesh.rotation.x += 0.005;
         mesh.rotation.y += 0.01;
@@ -627,9 +622,6 @@ const injectScript = `
 class nativeCamera extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      x: 0
-    };
   }
 
   render() {
@@ -653,21 +645,8 @@ class nativeCamera extends Component {
             scalesPageToFit={true}
           />
         </View>
-        <Text style={styles.capture} onPress={this.move.bind(this)}>[MOVE]</Text>
       </View>
     );
-  }
-
-  move() {
-    this.setState({ x: this.state.x + 10 });
-    this.refs.webviewbridge.sendToBridge( JSON.stringify( this.state ) )
-    console.log( this.state.x );
-  }
-
-  takePicture() {
-    this.camera.capture()
-      .then((data) => console.log(data))
-      .catch(err => console.error(err));
   }
 }
 
@@ -680,15 +659,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width
-  },
-  capture: {
-    position: 'absolute',
-    top: 10,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    color: '#000',
-    padding: 10,
-    margin: 40
   },
   webviewcont: {
     height: Dimensions.get('window').height,
