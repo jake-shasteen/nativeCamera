@@ -540,9 +540,11 @@ const HTML = `
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
-        document.body.appendChild( renderer.domElement );
+        
         controls = new DeviceOrientationController( camera, renderer.domElement );
         controls.connect();
+        
+        document.body.appendChild( renderer.domElement );
 
         window.addEventListener( 'resize', onWindowResize, false );
 
@@ -602,22 +604,6 @@ const injectScript = `
   });
 `;
 
-/*
-        <Image
-          style={styles.preview}
-          source={{uri: 'http://facebook.github.io/react/img/logo_og.png'}}
-        />
-        <View style={styles.webviewcont}>
-          <WebView 
-            ref={WEBVIEW_REF}
-            automaticallyAdjustContentInsets={true}
-            source={{ html: HTML }}
-            style={styles.webView}
-            javaScriptEnabled={true}
-            scalesPageToFit={true}
-          />
-        </View>
-        */
 
 class nativeCamera extends Component {
   constructor(props) {
