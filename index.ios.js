@@ -32,6 +32,9 @@ const HTML = `
         margin: 0;
         border: solid red 1px;
       }
+      p {
+        color: white;
+      }
       body {
         margin: 0;
         padding: 0;
@@ -41,6 +44,8 @@ const HTML = `
     </style>
   </head>
   <body>
+    <p class="alpha">Hello World</p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r74/three.min.js"></script>
     <script>
     /**
@@ -244,6 +249,7 @@ const HTML = `
     <script>
       window.addEventListener("deviceorientation", function( e ) {
         var obj = deviceOrientation( e );
+        $('#alpha').text( '' + obj.alpha );
 
         camera.rotation.x = obj.alpha * Math.PI / 180;
       }
